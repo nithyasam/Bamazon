@@ -13,11 +13,18 @@ var connection = mysql.createConnection({
 var question_set1 = [{
 	name: "id",
 	message: "Enter the Item Id of the product you want to purchase:"
-	
+
 },
 {
 	name: "quantity",
 	message: "Enter the number of units of the product:"
+}];
+
+var question_set2 = [{
+      name: "yORn",
+      type: "rawlist",
+      message: "Would you like to continue shopping",
+      choices: ["Y", "N"]
 }];
 
 connection.connect(function(err) {
@@ -55,11 +62,22 @@ function availableItems(){
 					t.cell('PRICE, USD', product.price, Table.number(2))
 					t.newRow()
 				});
-
 				console.log(t.toString());
 				userOptions();
 			}
 		});
+}
+
+function continueShopping(){
+	inquirer. 
+	prompt(question_set2).then(function(answer){
+		if(answer.yORn == 'Y'){
+			start();
+		}
+		else if(answer.yORn == 'N'){
+			process.exit();
+		}
+	});
 }
 
 function userOptions(){
@@ -71,7 +89,10 @@ function userOptions(){
 			}], function(error, result){
 				if (error) throw err;
 				if(result[0].stock_quantity >= answer.quantity){
-					console.log("Item available for purchase");
+					console.log("Item added to cart");
+					console.log("Total cost of purchase: $"+
+								result[0].price * answer.quantity+"\n");
+
 					var newQuantity = result[0].stock_quantity - answer.quantity;
 					connection.query(
 						"UPDATE products SET ? WHERE ?",
@@ -82,9 +103,7 @@ function userOptions(){
 							item_id : answer.id
 						}], function(error){
 							if (error) throw err;
-							console.log("Product added to cart");
-							console.log("Total cost of purchase: $"+
-								result[0].price * answer.quantity);
+							
 						});
 				}
 				else{
@@ -103,6 +122,7 @@ function userOptions(){
 							console.log("Inventory updated!");
 						});
 				}
+				continueShopping();
 			});
 	});
 }
