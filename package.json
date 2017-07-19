@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nithyasam/Bamazon#readme",
   "dependencies": {
+    "easy-table": "^1.1.0",
     "inquirer": "^3.2.0",
     "mysql": "^2.13.0"
   }
