@@ -21,10 +21,10 @@ var question_set1 = [{
 }];
 
 var question_set2 = [{
-      name: "yORn",
-      type: "rawlist",
-      message: "Would you like to continue shopping",
-      choices: ["Y", "N"]
+	name: "yORn",
+	type: "rawlist",
+	message: "Would you like to continue shopping",
+	choices: ["Y", "N"]
 }];
 
 connection.connect(function(err) {
@@ -33,11 +33,10 @@ connection.connect(function(err) {
 });
 
 function start(){
-	console.log("\n========================");
-	console.log("Available items for sale");
-	console.log("========================\n");
+	console.log("\n====================================");
+	console.log("\tAvailable items for sale");
+	console.log("====================================\n");
 	availableItems();
-	
 }
 
 function availableItems(){
@@ -83,27 +82,30 @@ function continueShopping(){
 function userOptions(){
 	inquirer.prompt(question_set1).then(function(answer) {
 		connection.query(
-			"SELECT stock_quantity, price FROM products WHERE ?",
+			"SELECT stock_quantity, price, product_sales FROM products WHERE ?",
 			[{
 				item_id : answer.id
 			}], function(error, result){
 				if (error) throw err;
 				if(result[0].stock_quantity >= answer.quantity){
+					var total_amount = result[0].price * answer.quantity;
 					console.log("Item added to cart");
 					console.log("Total cost of purchase: $"+
-								result[0].price * answer.quantity+"\n");
+						total_amount+"\n");
 
 					var newQuantity = result[0].stock_quantity - answer.quantity;
+					var newProduct_Sales = result[0].product_sales + total_amount;
 					connection.query(
 						"UPDATE products SET ? WHERE ?",
 						[{
-							stock_quantity : newQuantity
+							stock_quantity : newQuantity,
+							product_sales : newProduct_Sales
 						},
 						{
 							item_id : answer.id
 						}], function(error){
 							if (error) throw err;
-							
+							continueShopping();
 						});
 				}
 				else{
@@ -120,9 +122,9 @@ function userOptions(){
 							if (error) throw err;
 							console.log("Product inventory will be updated soon!");
 							console.log("Inventory updated!");
+							continueShopping();
 						});
 				}
-				continueShopping();
 			});
 	});
 }

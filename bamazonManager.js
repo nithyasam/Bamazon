@@ -102,6 +102,7 @@ function display(results){
 		var row = {};
 		row.item_id = results[i].item_id;
 		row.product_name = results[i].product_name;
+		row.department_name = results[i].department_name;
 		row.price = results[i].price;
 		row.stock_quantity = results[i].stock_quantity;
 		values[i] = row;
@@ -111,6 +112,7 @@ function display(results){
 	values.forEach(function(product) {
 		t.cell('ITEM ID', product.item_id);
 		t.cell('PRODUCT NAME', product.product_name)
+		t.cell('DEPARTMENT', product.department_name)
 		t.cell('PRICE, USD', product.price, Table.number(2))
 		t.cell('STOCK QUANTITY', product.stock_quantity)
 		t.newRow()
