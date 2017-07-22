@@ -3,4 +3,5 @@ Amazon-like storefront with MYSQL. The app will take in orders from customers an
 
 Technologies used : 
 NodeJS
+
 MySQL
