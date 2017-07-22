@@ -97,7 +97,7 @@ function viewSalesByDepartment(){
 	var q = "select a.department_id, a.department_name, a.over_head_costs,"+ "temp.product_sales, (temp.product_sales -  a.over_head_costs) as" + " total_profit  from departments a JOIN" +
 	"(select department_name,  sum(product_sales) as product_sales  from " + "products " +
 	"GROUP BY department_name)as temp " +
-	"ON a.department_name = temp.department_name";
+	"ON a.department_name = temp.department_name ORDER BY total_profit desc";
 	connection.query(q, function(error, results) {
 		if (error) throw error;
 		else {
