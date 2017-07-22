@@ -1,7 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require('easy-table');
-
+//====================================
+//MYSQL connection parameters
+//====================================
 var connection = mysql.createConnection({
 	host: "localhost",
 	port: 3306,
@@ -9,7 +11,9 @@ var connection = mysql.createConnection({
 	password: "password",
 	database: "bamazon"
 });
-
+//====================================
+//Question sets for inquirer prompt
+//====================================
 var question_set1 = [{
 	name: "id",
 	message: "Enter the Item Id of the product you want to purchase:"
@@ -19,26 +23,31 @@ var question_set1 = [{
 	name: "quantity",
 	message: "Enter the number of units of the product:"
 }];
-
 var question_set2 = [{
 	name: "yORn",
 	type: "rawlist",
 	message: "Would you like to continue shopping",
 	choices: ["Y", "N"]
 }];
-
+//====================================
+//start when connection is established
+//====================================
 connection.connect(function(err) {
 	if (err) throw err;
 	start();
 });
-
+//====================================
+//start the application
+//====================================
 function start(){
 	console.log("\n====================================");
 	console.log("\tAvailable items for sale");
 	console.log("====================================\n");
 	availableItems();
 }
-
+//====================================
+//Display available items
+//====================================
 function availableItems(){
 	connection.query(
 		"SELECT * from products",
@@ -66,7 +75,9 @@ function availableItems(){
 			}
 		});
 }
-
+//====================================
+//to continue shopping
+//====================================
 function continueShopping(){
 	inquirer. 
 	prompt(question_set2).then(function(answer){
@@ -78,7 +89,9 @@ function continueShopping(){
 		}
 	});
 }
-
+//====================================
+//show customer shopping menu
+//====================================
 function userOptions(){
 	inquirer.prompt(question_set1).then(function(answer) {
 		connection.query(

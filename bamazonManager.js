@@ -1,7 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require('easy-table');
-
+//====================================
+//MYSQL connection parameters
+//====================================
 var connection = mysql.createConnection({
 	host: "localhost",
 	port: 3306,
@@ -9,7 +11,9 @@ var connection = mysql.createConnection({
 	password: "password",
 	database: "bamazon"
 });
-
+//====================================
+//Question sets for inquirer prompt
+//====================================
 var question_set1 = [{
 	name: "choice",
 	type: "rawlist",
@@ -19,14 +23,12 @@ var question_set1 = [{
 	"Add to Inventory",
 	"Add New Product"]
 }];
-
 var question_set2 = [{
 	name: "yORn",
 	type: "rawlist",
 	message: "Would you like to continue",
 	choices: ["Y", "N"]
 }];
-
 var question_set3 = [{
 	name: "id",
 	message: "Enter the Item Id of the product you want to update:"
@@ -36,7 +38,6 @@ var question_set3 = [{
 	name: "quantity",
 	message: "Enter the quantity:"
 }];
-
 var question_set4 = [{
 	name: "name",
 	type: "input",
@@ -71,14 +72,16 @@ var question_set4 = [{
 	}
 }
 ];
-
-
-
+//====================================
+//start when connection is established
+//====================================
 connection.connect(function(err) {
 	if (err) throw err;
 	start();
 });
-
+//====================================
+//start the application
+//====================================
 function start(){
 	inquirer.prompt(question_set1).then(function(answer){
 		if(answer.choice == "View Products for Sale"){
@@ -95,7 +98,9 @@ function start(){
 		}
 	});
 }
-
+//====================================
+//display results in table format
+//====================================
 function display(results){
 	var values =[];
 	for(var i=0;i<results.length;i++){
@@ -119,7 +124,9 @@ function display(results){
 	});
 	console.log(t.toString());
 }
-
+//====================================
+//View the product details
+//====================================
 function viewProducts(){
 	connection.query(
 		"SELECT * from products",
@@ -131,7 +138,9 @@ function viewProducts(){
 			}
 		});
 }
-
+//====================================
+//View low inventory
+//====================================
 function viewLowInventory(){
 	connection.query(
 		"SELECT * FROM products WHERE stock_quantity < 5",
@@ -143,7 +152,9 @@ function viewLowInventory(){
 			}
 		});
 }
-
+//====================================
+//Add stock to the existing products
+//====================================
 function addToInventory(){
 	inquirer. 
 	prompt(question_set3).then(function(answer){
@@ -168,9 +179,10 @@ function addToInventory(){
 					});
 			});
 	});
-
 }
-
+//====================================
+//Add a new product
+//====================================
 function addNewProduct(){
 	inquirer. 
 	prompt(question_set4).then(function(answer){
@@ -185,11 +197,13 @@ function addNewProduct(){
 				if (error) throw error;
 				else
 					console.log("Product added.");
-					viewProducts()
+				viewProducts()
 			});
 	});
 }
-
+//====================================
+//Continue managing
+//====================================
 function continueManaging(){
 	inquirer. 
 	prompt(question_set2).then(function(answer){

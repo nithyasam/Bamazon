@@ -1,7 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require('easy-table');
-
+//====================================
+//MYSQL connection parameters
+//====================================
 var connection = mysql.createConnection({
 	host: "localhost",
 	port: 3306,
@@ -9,14 +11,15 @@ var connection = mysql.createConnection({
 	password: "password",
 	database: "bamazon"
 });
-
+//====================================
+//Question sets for inquirer prompt
+//====================================
 var question_set1 = [{
 	name: "choice",
 	type: "rawlist",
 	message: "Choose from the following option",
 	choices: ["View Product Sales by Department", "Create New Department"]
 }];
-
 var question_set2 = [{
 	name: "department_name",
 	type: "input",
@@ -35,19 +38,22 @@ var question_set2 = [{
 	}
 },
 ];
-
 var question_set3 = [{
 	name: "yORn",
 	type: "rawlist",
 	message: "Would you like to continue",
 	choices: ["Y", "N"]
 }];
-
+//====================================
+//start when connection is established
+//====================================
 connection.connect(function(err) {
 	if (err) throw err;
 	start();
 });
-
+//====================================
+//start the application
+//====================================
 function start(){
 	inquirer.prompt(question_set1).then(function(answer){
 		if(answer.choice == "View Product Sales by Department"){
@@ -58,7 +64,35 @@ function start(){
 		}
 	});
 }
+//====================================
+//display results in table format
+//====================================
+function display(results){
+	var values =[];
+	for(var i=0;i<results.length;i++){
+		var row = {};
+		row.department_id = results[i].department_id;
+		row.department_name = results[i].department_name;
+		row.over_head_costs = results[i].over_head_costs;
+		row.product_sales = results[i].product_sales;
+		row.total_profit = results[i].total_profit;
+		values[i] = row;
+	}
 
+	var t = new Table;
+	values.forEach(function(entry) {
+		t.cell('DEPARTMENT ID', entry.department_id)
+		t.cell('DEPARTMENT NAME', entry.department_name)
+		t.cell('OVER HEAR COSTS', entry.over_head_costs)
+		t.cell('PRODUCT Sales', entry.product_sales)
+		t.cell('TOTAL PROFIT', entry.total_profit)
+		t.newRow()
+	});
+	console.log(t.toString());
+}
+//====================================
+//View Sales for each department
+//====================================
 function viewSalesByDepartment(){
 	var q = "select a.department_id, a.department_name, a.over_head_costs,"+ "temp.product_sales, (temp.product_sales -  a.over_head_costs) as" + " total_profit  from departments a JOIN" +
 	"(select department_name,  sum(product_sales) as product_sales  from " + "products " +
@@ -67,32 +101,14 @@ function viewSalesByDepartment(){
 	connection.query(q, function(error, results) {
 		if (error) throw error;
 		else {
-			var values =[];
-			for(var i=0;i<results.length;i++){
-				var row = {};
-				row.department_id = results[i].department_id;
-				row.department_name = results[i].department_name;
-				row.over_head_costs = results[i].over_head_costs;
-				row.product_sales = results[i].product_sales;
-				row.total_profit = results[i].total_profit;
-				values[i] = row;
-			}
-
-			var t = new Table;
-			values.forEach(function(entry) {
-				t.cell('DEPARTMENT ID', entry.department_id)
-				t.cell('DEPARTMENT NAME', entry.department_name)
-				t.cell('OVER HEAR COSTS', entry.over_head_costs)
-				t.cell('PRODUCT Sales', entry.product_sales)
-				t.cell('TOTAL PROFIT', entry.total_profit)
-				t.newRow()
-			});
-			console.log(t.toString());
+			display(results);
 		}
 		continueSupervising();
 	});	
 }
-
+//====================================
+//create a new department
+//====================================
 function createDepartment(){
 	inquirer.prompt(question_set2).then(function(answer){
 		connection.query(
@@ -108,7 +124,9 @@ function createDepartment(){
 		continueSupervising();
 	});
 }
-
+//====================================
+//For continuing the supervision
+//====================================
 function continueSupervising(){
 	inquirer. 
 	prompt(question_set3).then(function(answer){
