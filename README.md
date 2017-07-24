@@ -1,21 +1,21 @@
 # Bamazon
 Amazon-like storefront with MYSQL. The app will take in orders from customers and deplete stock from the store's inventory, app tracks product sales across the store's departments and then provide a summary of the highest-grossing departments in the store.
 
-##Technologies used : 
+## Technologies used : 
 
 * NodeJS
 * MySQL
 
-Sample Result screenshots : 
+### Example Results: 
 
-### node bamazonCustomer.js
+#### node bamazonCustomer.js
 
 ![bamazonCustomer.js](/images/bamazonCustomer.png)
 
-### node bamazonManager.js
+#### node bamazonManager.js
 
 ![bamazonManager.js](/images/bamazonManager.png)
 
-### node bamazonSupervisor.js
+#### node bamazonSupervisor.js
 
 ![bamazonSupervisor.js](/images/bamazonSupervisor.png)
