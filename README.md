@@ -12,9 +12,13 @@ Amazon-like storefront with MYSQL. The app will take in orders from customers an
 
 ![bamazonCustomer.js](/images/bamazonCustomer.png)
 
+----------------------------------------------------
+
 #### node bamazonManager.js
 
 ![bamazonManager.js](/images/bamazonManager.png)
+
+----------------------------------------------------
 
 #### node bamazonSupervisor.js
 
