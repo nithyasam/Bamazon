@@ -123,7 +123,7 @@ function userOptions(){
 				}
 				else{
 					console.log("Insufficient quantity!");
-					var newQuantity = answer.quantity - result[0].stock_quantity;
+					var newQuantity = result[0].stock_quantity + (answer.quantity - result[0].stock_quantity);
 					connection.query(
 						"UPDATE products SET ? WHERE ?",
 						[{
